@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Lista de Compras</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <p>Comprar ({{itens.length}})</p>
+  <button ion-button block (click)="adicionarItem()">Adicionar item</button>
+  <ion-list reorder="true" (ionItemReorder)="reordenarItens($event)">
+    <button ion-item *ngFor="let item of itens" (click)="marcarComoComprado(item)">
+      {{ item.descricao }} 
+      <ion-note item-end>
+        Qtd: {{item.quantidade}}
+      </ion-note>
+      <button ion-button clear item-end>Editar</button>
+      <p *ngIf="item.observacao" >{{item.observacao}}</p>
+    </button>  
+  </ion-list>
+  <p>Comprado ({{itensComprados.length}})</p>
+  <ion-list reorder="true" (ionItemReorder)="reordenarItensComprados($event)">
+    <button ion-item *ngFor="let item of itensComprados" (click)="voltarParaAListaComprar(item)">
+      {{ item.descricao }} 
+      <ion-note item-end>
+        Qtd: {{item.quantidade}}
+      </ion-note>
+      <button ion-button clear item-end>Editar</button>
+      <p *ngIf="item.observacao" >{{item.observacao}}</p>
+    </button>  
+  </ion-list>
+</ion-content>

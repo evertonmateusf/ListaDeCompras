@@ -6,7 +6,7 @@
 
 <ion-content padding>
   <ion-searchbar (ionInput)="filterList($event)"></ion-searchbar>
-  <button ion-button block (click)="adicionar()">Adicionar</button>
+  <button ion-button block (click)="adicionar()">Adicionar na lista</button>
   <ion-list>
     <ion-item *ngFor="let item of itensFiltrados">
       <ion-label>{{ item.descricao }}</ion-label>

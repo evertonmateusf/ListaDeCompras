@@ -9,6 +9,25 @@
 
 <ion-content padding>
   <ion-item>
+    <ion-searchbar
+      (ionInput)="filterList($event)"
+      [(ngModel)]="searchQuery"
+    ></ion-searchbar>
+    <div *ngIf="searchQuery && itensFiltrados.length > 0">
+      <ion-list>
+        <ion-item *ngFor="let item of itensFiltrados">
+          <ion-label>{{ item.descricao }}</ion-label>
+          <ion-checkbox slot="end" [(ngModel)]="item.isChecked"></ion-checkbox>
+        </ion-item>
+      </ion-list>
+      <button ion-button block (click)="adicionarItem()">Adicionar item</button>
+    </div>
+    <div *ngIf="searchQuery && itensFiltrados.length == 0">
+      <button ion-button block (click)="adicionarItem()">Novo produto</button>
+    </div>
+  </ion-item>
+  <p>Comprar ({{filtrarLista(itens, false).length}})</p>
+  <ion-item lines="none">
     <ion-label>Reordenar</ion-label>
     <ion-checkbox
       color="dark"
@@ -16,9 +35,6 @@
       (click)="this.reordenar=!this.reordenar"
     ></ion-checkbox>
   </ion-item>
-  <button ion-button block (click)="adicionarItem()">Adicionar item</button>
-
-  <p>Comprar ({{filtrarLista(itens, false).length}})</p>
   <ion-grid>
     <ion-list
       reorder="{{this.reordenar}}"

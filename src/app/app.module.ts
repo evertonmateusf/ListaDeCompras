@@ -13,6 +13,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { EditarCompraPage } from '../pages/editar-compra/editar-compra';
 import { AdicionarProdutoPage } from '../pages/adicionar-produto/adicionar-produto';
 import { FinalizarCompraPage } from '../pages/finalizar-compra/finalizar-compra';
+import { StorageService } from '../services/storage.service';
+import { ProdutoService } from '../services/produto.service';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { FinalizarCompraPage } from '../pages/finalizar-compra/finalizar-compra'
   providers: [
     StatusBar,
     SplashScreen,
+    StorageService,
+    ProdutoService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

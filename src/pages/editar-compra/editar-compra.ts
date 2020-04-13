@@ -2,6 +2,7 @@ import { ProdutoDaListaDTO } from './../../models/produtoDaLista.dto';
 import { ProdutoDTO } from './../../models/produto.dto';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, reorderArray, AlertController } from 'ionic-angular';
+import { StorageService } from '../../services/storage.service';
 
 @IonicPage()
 @Component({
@@ -10,9 +11,12 @@ import { IonicPage, NavController, NavParams, reorderArray, AlertController } fr
 })
 export class EditarCompraPage {
   itens: ProdutoDaListaDTO[];
+  reordenar: boolean;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    public storage: StorageService) {
+    this.reordenar = false;
     this.itens = [
       { descricao: 'Suco', quantidade: 2, observacao: '', comprado: false },
       { descricao: 'Arroz', quantidade: 1, observacao: 'Trazer Prato Fino', comprado: false },
@@ -25,20 +29,35 @@ export class EditarCompraPage {
       { descricao: 'Cerveja', quantidade: 4, observacao: '', comprado: true },
       { descricao: 'Molho de tomate', quantidade: 1, observacao: 'Pomarola', comprado: true }
     ]
+    this.salvarLista();
+    
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad EditarCompraPage');
+  ionViewDidEnter(){
+    let lista = this.storage.getLista()
+    if (lista){
+      this.itens = lista.produtos;
+    }
+  }
+  salvarLista(){
+    const lista = {
+      "descricao": "Minha lista",
+      "produtos":this.itens,
+      "valor":0,
+      "mercado":"Assaí"
+    }
+    this.storage.setLista(lista);
   }
 
   marcarComoComprado(item: ProdutoDaListaDTO) {
     item.comprado = true;
+    this.salvarLista()
     // this.itensComprados.unshift(item);
     // this.itens = this.itens.filter(function (elemento) { return elemento.descricao != item.descricao; });
   }
 
   voltarParaAListaComprar(item: ProdutoDaListaDTO) {
     item.comprado = false;
+    this.salvarLista()
     // this.itens.push(item);
     // this.itensComprados = this.itensComprados.filter(function (elemento) { return elemento.descricao != item.descricao; });
   }
@@ -54,6 +73,7 @@ export class EditarCompraPage {
           text: 'Sim',
           handler: () => {
             this.itens = this.itens.filter(function (elemento) { return elemento.descricao != item.descricao; });
+            this.salvarLista()
           }
         }, {
           text: 'Não',
@@ -70,5 +90,11 @@ export class EditarCompraPage {
   }
   reordenarItens(indexes) {
     this.itens = reorderArray(this.itens, indexes);
+  }
+
+  filtrarLista(itens: ProdutoDaListaDTO[], comprado: boolean) {
+    return itens.filter(function (el) {
+      return el.comprado === comprado;
+    })
   }
 }

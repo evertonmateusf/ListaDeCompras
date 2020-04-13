@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Adicionar Produto</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let item of itens">
+      <ion-label>{{ item.descricao }}</ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="item.isChecked"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+  <button ion-button block (click)="adicionar()">Adicionar</button>
+</ion-content>

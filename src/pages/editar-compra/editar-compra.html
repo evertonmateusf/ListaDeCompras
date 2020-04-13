@@ -11,24 +11,45 @@
   <p>Comprar ({{itens.length}})</p>
   <button ion-button block (click)="adicionarItem()">Adicionar item</button>
   <ion-list reorder="true" (ionItemReorder)="reordenarItens($event)">
-    <button ion-item *ngFor="let item of itens" (click)="marcarComoComprado(item)">
-      {{ item.descricao }} 
-      <ion-note item-end>
-        Qtd: {{item.quantidade}}
-      </ion-note>
-      <button ion-button clear item-end>Editar</button>
-      <p *ngIf="item.observacao" >{{item.observacao}}</p>
-    </button>  
+    <ion-item *ngFor="let item of itens">
+      <div *ngIf="!item.comprado">
+        {{ item.descricao }}
+        <ion-note item-end>
+          Qtd: {{item.quantidade}}
+        </ion-note>
+        <button ion-button clear item-end (click)="marcarComoComprado(item)">
+          <ion-icon name="checkmark"></ion-icon>
+        </button>
+        <button ion-button clear item-end (click)="excluirItem(item)">
+          <ion-icon name="close"></ion-icon>
+        </button>
+        <button ion-button clear item-end (click)="editarItem(item)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+        <p *ngIf="item.observacao">{{item.observacao}}</p>
+      </div>
+    </ion-item>
   </ion-list>
-  <p>Comprado ({{itensComprados.length}})</p>
-  <ion-list reorder="true" (ionItemReorder)="reordenarItensComprados($event)">
-    <button ion-item *ngFor="let item of itensComprados" (click)="voltarParaAListaComprar(item)">
-      {{ item.descricao }} 
-      <ion-note item-end>
-        Qtd: {{item.quantidade}}
-      </ion-note>
-      <button ion-button clear item-end>Editar</button>
-      <p *ngIf="item.observacao" >{{item.observacao}}</p>
-    </button>  
+  <p>Comprado ({{itens.length}})</p>
+  <ion-list reorder="true" (ionItemReorder)="reordenarItens($event)">
+    <ion-item *ngFor="let item of itens">
+      <div *ngIf="item.comprado">
+        {{ item.descricao }}
+        <ion-note item-end>
+          Qtd: {{item.quantidade}}
+        </ion-note>
+        <button ion-button clear item-end (click)="voltarParaAListaComprar(item)">
+          <ion-icon name="arrow-up"></ion-icon>
+        </button>
+        <button ion-button clear item-end (click)="excluirItem(item)">
+          <ion-icon name="close"></ion-icon>
+        </button>
+        <button ion-button clear item-end (click)="editarItem(item)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+        <p *ngIf="item.observacao">{{item.observacao}}</p>
+      </div>
+    </ion-item>
   </ion-list>
+  <button ion-button block (click)="adicionarItem()">Finalizar compra</button>
 </ion-content>

@@ -2,9 +2,9 @@ import { ProdutoDaListaDTO } from './../../models/produtoDaLista.dto';
 import { ProdutoDTO } from './../../models/produto.dto';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, reorderArray, AlertController } from 'ionic-angular';
-import { StorageService } from '../../services/storage.service';
 import { AddProdutoDTO } from '../../models/addProduto.dto';
 import { ProdutoService } from '../../services/produto.service';
+import { ListaService } from '../../services/lista.service';
 
 @IonicPage()
 @Component({
@@ -19,8 +19,9 @@ export class EditarCompraPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
-    public storage: StorageService,
+    public listaService: ListaService,
     public produtoService: ProdutoService) {
+
     this.reordenar = false;
     this.searchQuery = "";
     this.itensFiltrados = [];
@@ -40,11 +41,12 @@ export class EditarCompraPage {
 
   }
   ionViewDidEnter() {
-    let lista = this.storage.getLista()
+    let lista = this.listaService.getLista()
     if (lista) {
       this.itens = lista.produtos;
     }
   }
+
   salvarLista() {
     let lista = {
       "codigo": "1",
@@ -54,7 +56,7 @@ export class EditarCompraPage {
       "mercado": "Assaí",
       "situacao": "EM ANDAMENTO"
     }
-    this.storage.setLista(lista);
+    this.listaService.setLista(lista);
   }
 
   marcarComoComprado(item: ProdutoDaListaDTO) {
@@ -103,6 +105,7 @@ export class EditarCompraPage {
   editarItem(item: ProdutoDTO) {
     alert(item.descricao)
   }
+
   reordenarItens(indexes) {
     this.itens = reorderArray(this.itens, indexes);
   }
@@ -120,7 +123,7 @@ export class EditarCompraPage {
         return -1;
       }
     }).map(item => { return { descricao: item.descricao, isChecked: false } })
-    let produtosNaLista = this.storage.getLista().produtos
+    let produtosNaLista = this.listaService.getLista().produtos
     if (produtosNaLista) {
       produtosOrdenados = produtosOrdenados.filter(item => {
         return produtosNaLista.filter(itemNaLista => {
@@ -130,6 +133,7 @@ export class EditarCompraPage {
     }
     this.itensFiltrados = produtosOrdenados
   }
+
   filterList(evt) {
     this.itensFiltrados = [];
     if (!this.searchQuery) {
@@ -144,5 +148,17 @@ export class EditarCompraPage {
         return false;
       }
     }).map(item => { return { descricao: item.descricao, isChecked: false } });
+  }
+
+  finalizarCompra(){
+    let lista = {
+      "codigo": "1",
+      "descricao": "Minha lista",
+      "produtos": this.itens,
+      "valor": 0,
+      "mercado": "Assaí",
+      "situacao": "EM ANDAMENTO"
+    }
+    this.navCtrl.push("FinalizarCompraPage",{listaDeCompras : lista});
   }
 }

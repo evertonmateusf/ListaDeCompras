@@ -1,15 +1,24 @@
-<!--
-  Generated template for the FinalizarCompraPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
   <ion-navbar>
-    <ion-title>finalizarCompra</ion-title>
+    <ion-title>Finalizar Compra</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+  <form [formGroup]="formGroup" (ngSubmit)="confirmaFinalizacao(); $event.preventDefault()">
+    <ion-item>
+      <ion-label stacked>Descrição</ion-label>
+      <ion-input type="text" formControlName="descricao" [(ngModel)]="listaDeCompras.descricao"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Mercado</ion-label>
+      <ion-input type="text" formControlName="mercado" [(ngModel)]="listaDeCompras.mercado"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>Valor</ion-label>
+      <ion-input type="number" formControlName="valor" [(ngModel)]="listaDeCompras.valor"></ion-input>
+    </ion-item>
 
+    <button ion-button block type="submit" [disabled]="formGroup.invalid">Finalizar Compra</button>
+  </form>
 </ion-content>

@@ -34,12 +34,12 @@ export class FinalizarCompraPage {
       enableBackdropDismiss: false,
       buttons: [
         {
-          text: 'Não'
-        }, {
           text: 'Sim',
           handler: () => {
             this.finalizarCompra();
           }
+        },{
+          text: 'Não'
         }
       ]
     });
@@ -68,7 +68,7 @@ export class FinalizarCompraPage {
         {
           text: 'Ok',
           handler: () => {
-            this.navCtrl.setRoot("EditarCompraPage");
+            this.navCtrl.setRoot("ListaComprasPage");
           }
         }
       ]

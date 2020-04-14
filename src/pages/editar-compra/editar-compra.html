@@ -26,7 +26,7 @@
       <button ion-button block (click)="adicionarItem()">Novo produto</button>
     </div>
   </ion-item>
-  <p>Comprar ({{filtrarLista(itens, false).length}})</p>
+  <p>Comprar ({{filtrarLista(lista.produtos, false).length}})</p>
   <ion-item lines="none">
     <ion-label>Reordenar</ion-label>
     <ion-checkbox
@@ -40,7 +40,7 @@
       reorder="{{this.reordenar}}"
       (ionItemReorder)="reordenarItens($event)"
     >
-      <ion-item *ngFor="let item of filtrarLista(itens, false)">
+      <ion-item *ngFor="let item of filtrarLista(lista.produtos, false)">
         {{ item.descricao }}
         <p *ngIf="item.observacao">{{item.observacao}}</p>
         <p>Qtd: {{item.quantidade}}</p>
@@ -56,12 +56,12 @@
       </ion-item>
     </ion-list>
   </ion-grid>
-  <p>Comprado ({{filtrarLista(itens, true).length}})</p>
+  <p>Comprado ({{filtrarLista(lista.produtos, true).length}})</p>
   <ion-list
     reorder="{{this.reordenar}}"
     (ionItemReorder)="reordenarItens($event)"
   >
-    <ion-item *ngFor="let item of filtrarLista(itens, true)">
+    <ion-item *ngFor="let item of filtrarLista(lista.produtos, true)">
       {{ item.descricao }}
       <p *ngIf="item.observacao">{{item.observacao}}</p>
       <p>Qtd: {{item.quantidade}}</p>

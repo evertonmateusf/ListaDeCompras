@@ -1,3 +1,4 @@
+import { ListaDeComprasDTO } from './../../models/lisdaDeCompras.dto';
 import { ProdutoDaListaDTO } from './../../models/produtoDaLista.dto';
 import { ProdutoDTO } from './../../models/produto.dto';
 import { Component } from '@angular/core';
@@ -12,7 +13,7 @@ import { ListaService } from '../../services/lista.service';
   templateUrl: 'editar-compra.html',
 })
 export class EditarCompraPage {
-  itens: ProdutoDaListaDTO[];
+  lista: ListaDeComprasDTO;
   itensFiltrados: AddProdutoDTO[];
   reordenar: boolean;
   searchQuery: string;
@@ -25,38 +26,13 @@ export class EditarCompraPage {
     this.reordenar = false;
     this.searchQuery = "";
     this.itensFiltrados = [];
-    this.itens = [
-      { descricao: 'Suco', quantidade: 2, observacao: '', comprado: false },
-      { descricao: 'Arroz', quantidade: 1, observacao: 'Trazer Prato Fino', comprado: false },
-      { descricao: 'Macarrão', quantidade: 1, observacao: 'Parafuso', comprado: false },
-      { descricao: 'Milho', quantidade: 1, observacao: '', comprado: false },
-      { descricao: 'Ervilha', quantidade: 1, observacao: '', comprado: false },
-      { descricao: 'Azeite', quantidade: 1, observacao: '', comprado: false },
-      { descricao: 'Feijão', quantidade: 1, observacao: 'Camil', comprado: false },
-      { descricao: 'Álcool', quantidade: 20, observacao: '', comprado: true },
-      { descricao: 'Cerveja', quantidade: 4, observacao: '', comprado: true },
-      { descricao: 'Molho de tomate', quantidade: 1, observacao: 'Pomarola', comprado: true }
-    ]
-    this.salvarLista();
-
+    this.lista = this.navParams.get('lista');
   }
   ionViewDidEnter() {
-    let lista = this.listaService.getLista()
-    if (lista) {
-      this.itens = lista.produtos;
-    }
   }
 
   salvarLista() {
-    let lista = {
-      "codigo": "1",
-      "descricao": "Minha lista",
-      "produtos": this.itens,
-      "valor": 0,
-      "mercado": "Assaí",
-      "situacao": "EM ANDAMENTO"
-    }
-    this.listaService.setLista(lista);
+    this.listaService.setLista(this.lista);
   }
 
   marcarComoComprado(item: ProdutoDaListaDTO) {
@@ -77,7 +53,7 @@ export class EditarCompraPage {
         "comprado": false
       }
     })
-    this.itens = produtos.concat(this.itens)
+    this.lista.produtos = produtos.concat(this.lista.produtos)
     this.salvarLista()
     this.searchQuery = "";
   }
@@ -89,7 +65,7 @@ export class EditarCompraPage {
         {
           text: 'Sim',
           handler: () => {
-            this.itens = this.itens.filter(function (elemento) { return elemento.descricao != item.descricao; });
+            this.lista.produtos = this.lista.produtos.filter(function (elemento) { return elemento.descricao != item.descricao; });
             this.salvarLista()
           }
         }, {
@@ -107,7 +83,8 @@ export class EditarCompraPage {
   }
 
   reordenarItens(indexes) {
-    this.itens = reorderArray(this.itens, indexes);
+    this.lista.produtos = reorderArray(this.lista.produtos, indexes);
+    this.salvarLista();
   }
 
   filtrarLista(itens: ProdutoDaListaDTO[], comprado: boolean) {
@@ -123,10 +100,9 @@ export class EditarCompraPage {
         return -1;
       }
     }).map(item => { return { descricao: item.descricao, isChecked: false } })
-    let produtosNaLista = this.listaService.getLista().produtos
-    if (produtosNaLista) {
+    if (this.lista.produtos) {
       produtosOrdenados = produtosOrdenados.filter(item => {
-        return produtosNaLista.filter(itemNaLista => {
+        return this.lista.produtos.filter(itemNaLista => {
           return itemNaLista.descricao === item.descricao
         }).length === 0
       })
@@ -151,14 +127,6 @@ export class EditarCompraPage {
   }
 
   finalizarCompra(){
-    let lista = {
-      "codigo": "1",
-      "descricao": "Minha lista",
-      "produtos": this.itens,
-      "valor": 0,
-      "mercado": "Assaí",
-      "situacao": "EM ANDAMENTO"
-    }
-    this.navCtrl.push("FinalizarCompraPage",{listaDeCompras : lista});
+    this.navCtrl.push("FinalizarCompraPage",{listaDeCompras : this.lista});
   }
 }
